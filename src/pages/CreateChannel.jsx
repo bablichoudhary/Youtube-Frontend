@@ -33,7 +33,7 @@ const CreateChannel = () => {
       const { data } = await createChannel(token, channel);
       setChannel(data);
       setSuccess("Channel created successfully!");
-      setTimeout(() => navigate("/view-channel"), 2000);
+      setTimeout(() => navigate("/view-channel"), 1000);
     } catch (err) {
       setError("Error creating channel. Try again.");
     }

@@ -27,7 +27,7 @@ const Navbar = ({ toggleSidebar }) => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(({ data }) => {
-          if (data) {
+          if (data && data.channel) {
             navigate("/view-channel"); // Redirect to channel view
           }
         })

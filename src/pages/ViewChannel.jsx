@@ -33,6 +33,7 @@ const ViewChannel = () => {
     loadChannel();
   }, [user, navigate, token]);
 
+  // Handle delete channel (and associated videos)
   const handleDeleteChannel = async () => {
     if (!token) {
       toast.error("You must be logged in to delete the channel.");
@@ -40,15 +41,13 @@ const ViewChannel = () => {
     }
 
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_BURL}/api/channels/${channel._id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`http://localhost:5000/api/channels/${channel._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
+      setChannel(null);
       toast.success("Channel and related videos deleted successfully!");
-      navigate("/");
+      navigate("/"); // Redirect to home page after successful deletion
     } catch (error) {
       console.error("Error deleting channel:", error);
       if (error.response && error.response.status === 404) {
@@ -58,7 +57,6 @@ const ViewChannel = () => {
       }
     }
   };
-
   if (loading) return <p className="text-center mt-10">Loading channel...</p>;
   if (!channel) return <p className="text-center mt-10">No channel found.</p>;
 

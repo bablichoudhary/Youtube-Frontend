@@ -40,7 +40,7 @@ const VideoPlayer = () => {
   useEffect(() => {
     const incrementView = async () => {
       try {
-        await axios.patch(`http://localhost:5000api/videos/${id}/views`);
+        await axios.patch(`http://localhost:5000/api/videos/${id}/views`);
       } catch (error) {
         console.error("Error incrementing video views:", error.message);
       }

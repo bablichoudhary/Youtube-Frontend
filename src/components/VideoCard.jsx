@@ -8,8 +8,6 @@ const VideoCard = ({ video }) => {
   const { token } = useContext(AuthContext); // Access token from AuthContext
   const [likes, setLikes] = useState(video.likes?.length || 0);
   const [liked, setLiked] = useState(false); // Track initial liked status
-  const [subscribers, setSubscribers] = useState(0);
-  const [subscribed, setSubscribed] = useState(false); // Track subscription status
 
   const channelId = video?.channelId?._id; // Extract channelId safely
   const channelName = video?.channelId?.channelName || "Unknown Channel";

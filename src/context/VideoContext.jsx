@@ -5,7 +5,7 @@ export const VideoContext = createContext(null);
 
 const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
-  const [allVideos, setAllVideos] = useState([]); // State for storing all videos
+  const [allVideos, setAllVideos] = useState([]);
   useEffect(() => {
     fetchVideos()
       .then(({ data }) => setVideos(data))
@@ -21,4 +21,4 @@ const VideoProvider = ({ children }) => {
   );
 };
 
-export default VideoProvider; // ✅ Ensure default export
+export default VideoProvider;

@@ -5,11 +5,11 @@ import { AuthContext } from "../context/AuthContext";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 const VideoCard = ({ video }) => {
-  const { token } = useContext(AuthContext); // Access token from AuthContext
+  const { token } = useContext(AuthContext);
   const [likes, setLikes] = useState(video.likes?.length || 0);
-  const [liked, setLiked] = useState(false); // Track initial liked status
+  const [liked, setLiked] = useState(false);
 
-  const channelId = video?.channelId?._id; // Extract channelId safely
+  const channelId = video?.channelId?._id;
   const channelName = video?.channelId?.channelName || "Unknown Channel";
 
   useEffect(() => {
@@ -22,15 +22,13 @@ const VideoCard = ({ video }) => {
       try {
         if (channelId) {
           const { data: channelData } = await axios.get(
-            `http://localhost:5000/api/channels/${channelId}`
+            `${import.meta.env.VITE_API_URL}/api/channels/${channelId}`
           );
-          setSubscribers(channelData.subscribers.length);
-          setSubscribed(channelData.isSubscribed || false);
         }
 
         if (token) {
           const { data: likeData } = await axios.get(
-            `${import.meta.env.VITE_BURL}api/videos/${video._id}/status`,
+            `${import.meta.env.VITE_API_URL}/api/videos/${video._id}/status`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -53,7 +51,7 @@ const VideoCard = ({ video }) => {
 
     try {
       await axios.post(
-        `http://localhost:5000/api/videos/${video._id}/like`,
+        `${import.meta.env.VITE_API_URL}/api/videos/${video._id}/like`,
         null,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -81,7 +79,6 @@ const VideoCard = ({ video }) => {
 
       <p className="text-gray-500 text-sm">{video.views} views</p>
 
-      {/* Like Button */}
       <button onClick={handleLike} className="flex items-center space-x-2">
         {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
         <span>{likes}</span>

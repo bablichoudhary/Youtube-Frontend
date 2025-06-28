@@ -41,9 +41,12 @@ const ViewChannel = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/channels/${channel._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/channels/${channel._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       setChannel(null);
       toast.success("Channel and related videos deleted successfully!");
@@ -57,6 +60,7 @@ const ViewChannel = () => {
       }
     }
   };
+
   if (loading) return <p className="text-center mt-10">Loading channel...</p>;
   if (!channel) return <p className="text-center mt-10">No channel found.</p>;
 

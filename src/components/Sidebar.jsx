@@ -1,8 +1,5 @@
 import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { AuthContext } from "../context/AuthContext";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
@@ -56,7 +53,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <hr className="border-gray-300" />
       </ul>
 
-      {/* Additional Section Below */}
       <ul className="mt-4 text-black space-y-4">
         <li className="hover:text-gray-700 cursor-pointer">🎞 Shorts</li>
         <li className="hover:text-gray-700 cursor-pointer">⏳ History</li>

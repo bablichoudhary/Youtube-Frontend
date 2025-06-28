@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+//BASE URL
+const API = axios.create({ baseURL: `${import.meta.env.VITE_API_URL}/api` });
 
 // Authentication
 export const registerUser = (userData) => API.post("/users/register", userData);
@@ -16,11 +17,11 @@ export const uploadVideo = (token, videoData) =>
     headers: { Authorization: `Bearer ${token}` },
   });
 
-// **New: Search Videos by title, category, and channel name**
+// Search Videos
 export const searchVideos = (query) =>
   API.get(`/videos/search?query=${query}`).catch((error) => {
     console.error("Error fetching search results:", error);
-    throw error; // Handle the 404 or server error gracefully
+    throw error;
   });
 
 // Comments
@@ -32,13 +33,14 @@ export const addComment = (token, commentData) =>
 export const deleteComment = async (commentId) => {
   try {
     const response = await axios.delete(
-      `http://localhost:5000/api/comments/${commentId}`
+      `${import.meta.env.VITE_API_URL}/api/comments/${commentId}`
     );
     return response.data;
   } catch (error) {
     throw error;
   }
 };
+
 // Channels
 export const createChannel = (token, channelData) =>
   API.post("/channels", channelData, {
@@ -57,7 +59,8 @@ export const deleteChannel = (token, channelId) =>
   API.delete(`/channels/${channelId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-// Like a Video
+
+// Like / Dislike Videos
 export const likeVideo = (token, videoId) =>
   API.post(
     `/videos/${videoId}/like`,
@@ -67,18 +70,19 @@ export const likeVideo = (token, videoId) =>
     }
   );
 
-// Subscribe to a Channel
-export const subscribeToChannel = (token, channelId) =>
+export const dislikeVideo = (token, videoId) =>
   API.post(
-    `/channels/${channelId}/subscribe`,
+    `/videos/${videoId}/dislike`,
     {},
     {
       headers: { Authorization: `Bearer ${token}` },
     }
   );
-export const dislikeVideo = (token, videoId) =>
+
+// Subscribe to Channel
+export const subscribeToChannel = (token, channelId) =>
   API.post(
-    `/videos/${videoId}/dislike`,
+    `/channels/${channelId}/subscribe`,
     {},
     {
       headers: { Authorization: `Bearer ${token}` },

@@ -43,13 +43,17 @@ const SignUp = () => {
     try {
       let res;
       if (isLogin) {
-        res = await axios.post(`http://localhost:5000/api/users/login`, form, {
-          headers: { "Content-Type": "application/json" },
-        });
+        res = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/users/login`,
+          form,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
         setSuccess("Login successful!");
       } else {
         res = await axios.post(
-          `http://localhost:5000/api/users/register`,
+          `${import.meta.env.VITE_API_URL}/api/users/register`,
           form,
           {
             headers: { "Content-Type": "application/json" },

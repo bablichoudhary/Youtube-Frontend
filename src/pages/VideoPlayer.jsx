@@ -24,7 +24,7 @@ const VideoPlayer = () => {
   const [dislikes, setDislikes] = useState(0);
   const [subscribers, setSubscribers] = useState(0);
   const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false); // Added dislike state
+  const [disliked, setDisliked] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +40,9 @@ const VideoPlayer = () => {
   useEffect(() => {
     const incrementView = async () => {
       try {
-        await axios.patch(`http://localhost:5000/api/videos/${id}/views`);
+        await axios.patch(
+          `${import.meta.env.VITE_API_URL}/api/videos/${id}/views`
+        );
       } catch (error) {
         console.error("Error incrementing video views:", error.message);
       }
@@ -56,10 +58,12 @@ const VideoPlayer = () => {
         setVideo(data);
         setLikes(data.likes.length);
         setDislikes(data.dislikes.length);
-        setLiked(data.isLiked); // Assuming your API provides this
+        setLiked(data.isLiked);
         setDisliked(data.isDisliked);
         if (allVideos.length === 0) {
-          const res = await axios.get(`http://localhost:5000/api/videos`);
+          const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/videos`
+          );
           setAllVideos(res.data);
         }
       } catch (error) {
@@ -76,7 +80,7 @@ const VideoPlayer = () => {
       if (!video || !video.channelId) return;
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/channels/${video.channelId._id}`
+          `${import.meta.env.VITE_API_URL}/api/channels/${video.channelId._id}`
         );
         setSubscribers(data.subscribers.length);
         setSubscribed(data.isSubscribed);
@@ -105,9 +109,13 @@ const VideoPlayer = () => {
       return;
     }
     try {
-      await axios.post(`http://localhost:5000/api/videos/${id}/like`, null, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/videos/${id}/like`,
+        null,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setLikes((prev) => (liked ? prev - 1 : prev + 1));
       setLiked(!liked);
     } catch (error) {
@@ -121,26 +129,22 @@ const VideoPlayer = () => {
       return;
     }
     try {
-      // Optimistically update UI
       setDisliked((prev) => !prev);
       setDislikes((prev) => (disliked ? prev - 1 : prev + 1));
 
-      // Send request to server
       const response = await axios.post(
-        `http://localhost:5000/api/videos/${id}/dislike`,
+        `${import.meta.env.VITE_API_URL}/api/videos/${id}/dislike`,
         null,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      // Confirm with server response
       setDislikes(response.data.dislikes);
       setDisliked(response.data.isDisliked);
     } catch (error) {
       console.error("Error disliking video:", error);
       toast.error("An error occurred. Please try again.");
-      // Revert UI update on error
       setDisliked((prev) => !prev);
       setDislikes((prev) => (disliked ? prev + 1 : prev - 1));
     }
@@ -157,7 +161,9 @@ const VideoPlayer = () => {
     }
     try {
       await axios.post(
-        `http://localhost:5000/api/channels/${video.channelId._id}/subscribe`,
+        `${import.meta.env.VITE_API_URL}/api/channels/${
+          video.channelId._id
+        }/subscribe`,
         null,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -197,9 +203,12 @@ const VideoPlayer = () => {
       return;
     }
     try {
-      await axios.delete(`http://localhost:5000/api/comments/${commentId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/comments/${commentId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setComments((prevComments) =>
         prevComments.filter((comment) => comment._id !== commentId)
       );
@@ -215,9 +224,7 @@ const VideoPlayer = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col lg:flex-row">
-        {" "}
         <div className="w-full lg:w-2/3 lg:pr-4">
-          {" "}
           <h2 className="text-xl font-bold">{video.title}</h2>
           {embedUrl ? (
             <iframe
@@ -309,7 +316,7 @@ const VideoPlayer = () => {
           <h3 className="text-lg font-bold">More Videos</h3>
           <ul>
             {allVideos
-              .filter((vid) => vid._id !== id && vid.channelId) // Exclude the current video and filter out videos without a channelId
+              .filter((vid) => vid._id !== id && vid.channelId)
               .map((relatedVideo) => (
                 <li key={relatedVideo._id} className="my-4">
                   <Link to={`/video/${relatedVideo._id}`}>

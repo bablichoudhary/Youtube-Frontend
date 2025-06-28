@@ -20,7 +20,7 @@ const UploadVideo = () => {
   useEffect(() => {
     if (user && token) {
       axios
-        .get(`http://localhost:5000/api/channels/user/${user._id}`, {
+        .get(`${import.meta.env.VITE_API_URL}/api/channels/user/${user._id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => setChannel(response.data))
@@ -47,12 +47,12 @@ const UploadVideo = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/videos`,
+        `${import.meta.env.VITE_API_URL}/api/videos`,
         { ...videoData, channelId: channel._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSuccessMessage("Video uploaded successfully!");
-      setTimeout(() => navigate("/"), 2000); // Redirect to home page after 2 seconds
+      setTimeout(() => navigate("/"), 2000);
     } catch (error) {
       setErrorMessage("Failed to upload video. Please try again.");
     }

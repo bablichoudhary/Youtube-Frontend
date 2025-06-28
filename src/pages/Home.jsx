@@ -18,7 +18,9 @@ const Home = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/videos`);
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/videos`
+        );
         const validVideos = data.filter((video) => video.channelId);
         setVideos(validVideos);
         setFilteredVideos(validVideos);

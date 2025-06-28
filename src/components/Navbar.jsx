@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 
 import { AiFillYoutube } from "react-icons/ai";
 import { FaVideo, FaUserCircle, FaBell } from "react-icons/fa";
-import Swal from "sweetalert2"; // SweetAlert2 for alerts
+import Swal from "sweetalert2";
 
 import SearchDropdown from "./SearchDropdown";
 import { searchVideos } from "../api";
@@ -20,18 +20,27 @@ const Navbar = ({ toggleSidebar }) => {
   const navigate = useNavigate();
 
   // Fetch channel info if user is logged in and has a token
+
   useEffect(() => {
     if (!channel && user && token) {
       axios
-        .get(`http://localhost:5000/api/channels/${user._id}`, {
+        .get(`${import.meta.env.VITE_API_URL}/api/channels/user/${user._id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(({ data }) => {
-          if (data && data.channel) {
-            navigate("/view-channel"); // Redirect to channel view
+          if (data) {
+            navigate("/view-channel");
+          } else {
+            console.log("User has no channel yet.");
           }
         })
-        .catch(() => console.error("Failed to fetch channel."));
+        .catch((err) => {
+          if (err.response && err.response.status === 404) {
+            console.log("Channel not found (user has no channel yet).");
+          } else {
+            console.error("Failed to fetch channel.", err);
+          }
+        });
     }
   }, [channel, user, token, navigate]);
 
@@ -93,7 +102,7 @@ const Navbar = ({ toggleSidebar }) => {
 
   return (
     <nav className="bg-white text-black p-4 flex items-center justify-between relative">
-      {/* Left Section: Hamburger + YouTube Logo */}
+      {/* Left Section */}
       <div className="flex items-center space-x-3">
         <button onClick={toggleSidebar} className="text-2xl">
           ☰
@@ -104,7 +113,7 @@ const Navbar = ({ toggleSidebar }) => {
         </Link>
       </div>
 
-      {/* Search Bar Section */}
+      {/* Search Bar */}
       <div className="relative flex-grow max-w-lg mx-4">
         <input
           type="text"
@@ -121,9 +130,8 @@ const Navbar = ({ toggleSidebar }) => {
         )}
       </div>
 
-      {/* User Profile / Sign In Section */}
+      {/* User Profile / Sign In */}
       <div className="flex items-center space-x-5">
-        {/* Move icons to the right, next to user section */}
         <FaVideo
           className="text-2xl cursor-pointer"
           onClick={handleUploadClick}

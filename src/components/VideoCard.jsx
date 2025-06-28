@@ -50,15 +50,16 @@ const VideoCard = ({ video }) => {
     }
 
     try {
-      await axios.post(
+      const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/videos/${video._id}/like`,
         null,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setLikes((prevLikes) => (liked ? prevLikes - 1 : prevLikes + 1));
-      setLiked(!liked);
+
+      setLikes(data.likes.length);
+      setLiked(data.isLiked);
     } catch (error) {
       console.error("Error liking video:", error);
     }

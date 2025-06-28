@@ -11,7 +11,7 @@ import SearchDropdown from "./SearchDropdown";
 import { searchVideos } from "../api";
 
 const Navbar = ({ toggleSidebar }) => {
-  const { user, channel, logout, token } = useContext(AuthContext);
+  const { user, channel, setChannel, logout, token } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);

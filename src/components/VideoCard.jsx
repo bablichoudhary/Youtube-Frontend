@@ -7,7 +7,6 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 const VideoCard = ({ video }) => {
   const { token } = useContext(AuthContext);
 
-  // ✅ Local state, initialized ONCE from props
   const [likes, setLikes] = useState(() => video.likes?.length || 0);
   const [liked, setLiked] = useState(false);
 
@@ -48,11 +47,10 @@ const VideoCard = ({ video }) => {
         }
       );
 
-      // ✅ Use server's real response
       setLikes(data.likes.length);
       setLiked(data.isLiked);
     } catch (error) {
-      console.error("Error liking video:", error);
+      console.error("Error toggling like:", error);
     }
   };
 

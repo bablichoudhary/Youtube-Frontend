@@ -1,6 +1,7 @@
-YouTube Clone Frontend
+StreamStack Youtube inspired Application
 Project Overview
-This is the frontend of a YouTube Clone built using React, Vite, Tailwind CSS, and Axios. The application replicates key YouTube features, including video upload, likes/dislikes, comments, channel creation, and user authentication. It is integrated with a Node.js/Express backend and MongoDB to manage users, videos, and channels.
+
+This is the frontend of a StreamStack built using React, Vite, Tailwind CSS, and Axios. The application replicates key YouTube features, including video upload, likes/dislikes, comments, channel creation, and user authentication. It is integrated with a Node.js/Express backend and MongoDB to manage users, videos, and channels.
 
 Installation
 cd frontend
@@ -130,3 +131,5 @@ POST /api/videos/:id/dislike – Dislike a video
 
 Youtube Clone Video Link
 https://drive.google.com/drive/u/0/folders/1xWED52LyuwUhMpXwHT4E3tzKqBm2bp8R
+
+Live ON https://streamstack.vercel.app/

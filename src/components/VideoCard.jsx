@@ -6,42 +6,32 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 const VideoCard = ({ video }) => {
   const { token } = useContext(AuthContext);
-  const [likes, setLikes] = useState(video.likes?.length || 0);
+
+  // ✅ Local state, initialized ONCE from props
+  const [likes, setLikes] = useState(() => video.likes?.length || 0);
   const [liked, setLiked] = useState(false);
 
   const channelId = video?.channelId?._id;
   const channelName = video?.channelId?.channelName || "Unknown Channel";
 
   useEffect(() => {
-    const fetchInitialData = async () => {
-      if (!channelId) {
-        console.warn("Channel ID is missing for this video. Skipping fetch.");
-        return;
-      }
-
+    const fetchLikeStatus = async () => {
+      if (!token) return;
       try {
-        if (channelId) {
-          const { data: channelData } = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/channels/${channelId}`
-          );
-        }
-
-        if (token) {
-          const { data: likeData } = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/videos/${video._id}/status`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          setLiked(likeData.isLiked || false);
-        }
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/videos/${video._id}/status`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setLiked(data.isLiked || false);
       } catch (error) {
-        console.error("Error fetching initial data:", error);
+        console.error("Error fetching like status:", error);
       }
     };
 
-    fetchInitialData();
-  }, [video._id, channelId, token]);
+    fetchLikeStatus();
+  }, [video._id, token]);
 
   const handleLike = async () => {
     if (!token) {
@@ -58,6 +48,7 @@ const VideoCard = ({ video }) => {
         }
       );
 
+      // ✅ Use server's real response
       setLikes(data.likes.length);
       setLiked(data.isLiked);
     } catch (error) {
@@ -77,7 +68,6 @@ const VideoCard = ({ video }) => {
       </Link>
 
       <p className="text-gray-600 truncate">{channelName}</p>
-
       <p className="text-gray-500 text-sm">{video.views} views</p>
 
       <button onClick={handleLike} className="flex items-center space-x-2">

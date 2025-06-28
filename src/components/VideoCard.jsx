@@ -38,6 +38,10 @@ const VideoCard = ({ video }) => {
       return;
     }
 
+    // Optimistically update UI
+    setLiked((prev) => !prev);
+    setLikes((prev) => (liked ? prev - 1 : prev + 1));
+
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/videos/${video._id}/like`,
@@ -47,10 +51,14 @@ const VideoCard = ({ video }) => {
         }
       );
 
+      // Use actual server response to confirm
       setLikes(data.likes.length);
       setLiked(data.isLiked);
     } catch (error) {
-      console.error("Error toggling like:", error);
+      console.error("Error liking video:", error);
+      // Optionally revert
+      setLiked((prev) => !prev);
+      setLikes((prev) => (liked ? prev + 1 : prev - 1));
     }
   };
 

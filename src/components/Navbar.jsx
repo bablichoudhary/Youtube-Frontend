@@ -29,9 +29,7 @@ const Navbar = ({ toggleSidebar }) => {
         })
         .then(({ data }) => {
           if (data) {
-            navigate("/view-channel");
-          } else {
-            console.log("User has no channel yet.");
+            setChannel(data); // ✅ no navigate here
           }
         })
         .catch((err) => {
@@ -42,7 +40,7 @@ const Navbar = ({ toggleSidebar }) => {
           }
         });
     }
-  }, [channel, user, token, navigate]);
+  }, [channel, user, token, setChannel]);
 
   const handleSearchInputChange = async (e) => {
     const query = e.target.value;

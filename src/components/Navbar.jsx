@@ -4,7 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 
 import { AiFillYoutube } from "react-icons/ai";
-import { FaVideo, FaUserCircle, FaBell } from "react-icons/fa";
+import { FaVideo, FaUserCircle, FaBell, FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { FaSearch } from "react-icons/fa";
 import SearchDropdown from "./SearchDropdown";
@@ -143,13 +143,32 @@ const Navbar = ({ toggleSidebar }) => {
           )}
 
           {isSearchOpen && (
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={handleSearchInputChange}
-              className="w-full p-2 border rounded bg-white text-black"
-            />
+            <div className="relative w-full">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  className="flex-grow p-2 border rounded bg-white text-black"
+                />
+                <button
+                  onClick={() => setIsSearchOpen(false)}
+                  className="text-xl text-gray-700"
+                >
+                  <FaTimes />
+                </button>
+              </div>
+
+              {showDropdown && searchQuery && (
+                <div className="absolute top-full left-0 w-full bg-white z-50 shadow-lg rounded mt-1">
+                  <SearchDropdown
+                    searchResults={searchResults}
+                    closeDropdown={() => setShowDropdown(false)}
+                  />
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

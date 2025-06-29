@@ -86,7 +86,8 @@ const Home = () => {
       {/* Main Video Section */}
       <div className="flex flex-col flex-grow">
         {/* Category Buttons */}
-        <div className="p-4 flex space-x-3 overflow-x-auto scrollbar-hide">
+
+        <div className="flex flex-wrap gap-2 px-2 py-4">
           {categories.map((category) => (
             <button
               key={category}
@@ -94,7 +95,7 @@ const Home = () => {
               className={`px-4 py-2 rounded-full border whitespace-nowrap ${
                 selectedCategory === category
                   ? "bg-red-500 text-white"
-                  : "bg-gray-100"
+                  : "bg-gray-100 hover:bg-gray-200"
               }`}
             >
               {category}

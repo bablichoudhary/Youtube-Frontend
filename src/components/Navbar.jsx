@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import { AiFillYoutube } from "react-icons/ai";
 import { FaVideo, FaUserCircle, FaBell } from "react-icons/fa";
 import Swal from "sweetalert2";
-
+import { FaSearch } from "react-icons/fa";
 import SearchDropdown from "./SearchDropdown";
 import { searchVideos } from "../api";
 
@@ -17,6 +17,7 @@ const Navbar = ({ toggleSidebar }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
 
   // Fetch channel info if user is logged in and has a token
@@ -113,23 +114,52 @@ const Navbar = ({ toggleSidebar }) => {
 
       {/* Search Bar */}
       <div className="relative flex-grow max-w-lg mx-4">
-        <input
-          type="text"
-          placeholder="Search videos..."
-          value={searchQuery}
-          onChange={handleSearchInputChange}
-          className="w-full p-2 border rounded bg-white text-black"
-        />
-        {showDropdown && searchQuery && (
-          <SearchDropdown
-            searchResults={searchResults}
-            closeDropdown={() => setShowDropdown(false)}
+        {/* Desktop View: always show search input */}
+        <div className="hidden md:block">
+          <input
+            type="text"
+            placeholder="Search videos..."
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+            className="w-full p-2 border rounded bg-white text-black"
           />
-        )}
+          {showDropdown && searchQuery && (
+            <SearchDropdown
+              searchResults={searchResults}
+              closeDropdown={() => setShowDropdown(false)}
+            />
+          )}
+        </div>
+
+        {/* Mobile View */}
+        <div className="block md:hidden">
+          {!isSearchOpen && (
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="text-2xl ml-10"
+            >
+              <FaSearch />
+            </button>
+          )}
+
+          {isSearchOpen && (
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              className="w-full p-2 border rounded bg-white text-black"
+            />
+          )}
+        </div>
       </div>
 
       {/* User Profile / Sign In */}
-      <div className="flex items-center space-x-5">
+      <div
+        className={`flex items-center space-x-5 ${
+          isSearchOpen ? "hidden md:flex" : ""
+        }`}
+      >
         <FaVideo
           className="text-2xl cursor-pointer"
           onClick={handleUploadClick}
